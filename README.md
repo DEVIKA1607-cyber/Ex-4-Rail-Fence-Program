@@ -4,7 +4,7 @@
 
 # AIM:
 
- To write a C program to implement the rail fence transposition technique.
+# To write a C program to implement the rail fence transposition technique.
 
 # DESCRIPTION:
 
@@ -22,82 +22,57 @@ STEP-5: Read the characters row wise or column wise in the former order to get t
 ```
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
 
+int main()
+{
+    char plaintext[100];
+    char rail[10][100];
+    int i, j, row = 0, dir = 1;
+    int rails, len;
 
-int cmpfunc(const void *a, const void *b) {
-    return (*(char *)a - *(char *)b);
-}
-
-int main() {
-    char plaintext[100], keyword[20];
-    char matrix[20][20];  
-    int lenText, lenKey, rows, k = 0;
-
-   
-    printf("Enter the plaintext: ");
+    printf("Enter the plain text: ");
     fgets(plaintext, sizeof(plaintext), stdin);
-    plaintext[strcspn(plaintext, "\n")] = '\0'; 
-    lenText = strlen(plaintext);
 
-   
-    printf("Enter the keyword: ");
-    scanf("%s", keyword);
-    lenKey = strlen(keyword);
+    // Remove newline character added by fgets
+    plaintext[strcspn(plaintext, "\n")] = '\0';
 
-   
-    rows = (lenText + lenKey - 1) / lenKey; 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < lenKey; j++) {
-            if (k < lenText)
-                matrix[i][j] = plaintext[k++];
-            else
-                matrix[i][j] = 'X'; 
-        }
+    printf("Enter the number of rails: ");
+    scanf("%d", &rails);
+
+    len = strlen(plaintext);
+
+    // Initialize rail matrix
+    for (i = 0; i < rails; i++)
+        for (j = 0; j < len; j++)
+            rail[i][j] = '\n';
+
+    // Create zig-zag pattern
+    for (i = 0; i < len; i++)
+    {
+        rail[row][i] = plaintext[i];
+
+        if (row == 0)
+            dir = 1;
+        else if (row == rails - 1)
+            dir = -1;
+
+        row += dir;
     }
 
-
-    int order[20];
-    for (int i = 0; i < lenKey; i++)
-        order[i] = i;
-
-  
-    for (int i = 0; i < lenKey - 1; i++) {
-        for (int j = i + 1; j < lenKey; j++) {
-            if (keyword[j] < keyword[i]) {
-                char temp = keyword[i];
-                keyword[i] = keyword[j];
-                keyword[j] = temp;
-
-                int tmp = order[i];
-                order[i] = order[j];
-                order[j] = tmp;
-            }
-        }
-    }
-
-  
+    // Print cipher text
     printf("Cipher Text: ");
-    for (int c = 0; c < lenKey; c++) {
-        int col = order[c];
-        for (int r = 0; r < rows; r++) {
-            printf("%c", matrix[r][col]);
-        }
-    }
-    printf("\n");
+    for (i = 0; i < rails; i++)
+        for (j = 0; j < len; j++)
+            if (rail[i][j] != '\n')
+                printf("%c", rail[i][j]);
 
     return 0;
 }
 ```
 
-
-
 # OUTPUT
+<img width="581" height="234" alt="image" src="https://github.com/user-attachments/assets/ac5a2646-f650-4478-add9-d127fc23e18b" />
 
-<img width="401" height="216" alt="image" src="https://github.com/user-attachments/assets/2a640345-27b2-4f3e-aeb8-0eee41229ad4" />
 
 # RESULT
-Thus, the C program to implement the Rail Fence transposition technique was written and
-executed successfully, and the cipher text was generated correctly. 
-
+Thus, the C program to implement the Rail Fence transposition technique was written and executed successfully, and the cipher text was generated correctly.
